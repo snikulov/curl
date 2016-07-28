@@ -2,7 +2,7 @@ version: 7.50.0.{build}
 
 environment:
     matrix:
-      - PRJ_GEN: "Visual Studio 10 2010 Win64"
+      - PRJ_GEN: "Visual Studio 10 2010"
         BDIR: msvc2010
         PRJ_CFG: Release
         OPENSSL: OFF
