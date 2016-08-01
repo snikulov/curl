@@ -199,18 +199,17 @@ want_lt_version=1.4.2
 
 # This approach that tries 'glibtoolize' first is intended for systems that
 # have GNU libtool named as 'glibtoolize' and libtoolize not being GNU's.
+for ltoolize in glibtoolize libtoolize; do
+  LIBTOOLIZE=`which $ltoolize 2>/dev/null`
+  if test "$LIBTOOLIZE"; then
+    break;
+  fi
+done
 
-libtoolize=`findtool glibtoolize 2>/dev/null`
-if test ! -x "$libtoolize"; then
-  libtoolize=`findtool ${LIBTOOLIZE:-libtoolize}`
-fi
-if test -z "$libtoolize"; then
-  echo "buildconf: libtoolize not found."
-  echo "  You need GNU libtoolize $want_lt_version or newer installed."
-  exit 1
-fi
+echo $LIBTOOLIZE
+$LIBTOOLIZE --version
 
-lt_pver=`$libtoolize --version 2>/dev/null|head -n 1`
+lt_pver=`$LIBTOOLIZE --version 2>/dev/null|head -n 1`
 lt_qver=`echo $lt_pver|sed -e "s/([^)]*)//g" -e "s/^[^0-9]*//g"`
 lt_version=`echo $lt_qver|sed -e "s/[- ].*//" -e "s/\([a-z]*\)$//"`
 if test -z "$lt_version"; then
@@ -331,7 +330,7 @@ done
 #
 
 echo "buildconf: running libtoolize"
-${libtoolize} --copy --force || die "libtoolize command failed"
+${LIBTOOLIZE} --copy --force || die "libtoolize command failed"
 
 # When using libtool 1.5.X (X < 26) we copy libtool.m4 to our local m4
 # subdirectory and this local copy is patched to fix some warnings that
